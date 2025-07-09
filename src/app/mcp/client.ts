@@ -41,6 +41,7 @@ export function createMCPClient(url: string) {
 
   function onMessage(handler: (data: any) => void) {
     handlers.push(handler);
+
   }
 
   function close() {
@@ -49,5 +50,4 @@ export function createMCPClient(url: string) {
     messagesEndpoint = null;
   }
 
-  return { connect, send, onMessage, close } as const;
 }
