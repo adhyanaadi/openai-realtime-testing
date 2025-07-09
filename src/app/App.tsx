@@ -66,6 +66,8 @@ function App() {
   const [selectedAgentConfigSet, setSelectedAgentConfigSet] = useState<
     RealtimeAgent[] | null
   >(null);
+  const availableVoices = ['echo', 'ash', 'verse'];
+  const [selectedVoice, setSelectedVoice] = useState<string>('echo');
 
   const audioElementRef = useRef<HTMLAudioElement | null>(null);
   // Ref to identify whether the latest agent switch came from an automatic handoff
@@ -157,6 +159,12 @@ function App() {
   }, [selectedAgentName]);
 
   useEffect(() => {
+    if (sessionStatus === "DISCONNECTED" && selectedAgentName) {
+      connectToRealtime();
+    }
+  }, [selectedVoice]);
+
+  useEffect(() => {
     if (
       sessionStatus === "CONNECTED" &&
       selectedAgentConfigSet &&
@@ -211,6 +219,10 @@ function App() {
           const [agent] = reorderedAgents.splice(idx, 1);
           reorderedAgents.unshift(agent);
         }
+
+        reorderedAgents.forEach((agent) => {
+          (agent as any).voice = selectedVoice;
+        });
 
         const companyName = agentSetKey === 'customerServiceRetail'
           ? customerServiceRetailCompanyName
@@ -343,6 +355,13 @@ function App() {
     // connectToRealtime will be triggered by effect watching selectedAgentName
   };
 
+  const handleVoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newVoice = e.target.value;
+    disconnectFromRealtime();
+    setSelectedVoice(newVoice);
+    // connect will be triggered by effect watching selectedVoice
+  };
+
   // Because we need a new connection, refresh the page when codec changes
   const handleCodecChange = (newCodec: string) => {
     const url = new URL(window.location.toString());
@@ -365,6 +384,10 @@ function App() {
     if (storedAudioPlaybackEnabled) {
       setIsAudioPlaybackEnabled(storedAudioPlaybackEnabled === "true");
     }
+    const storedVoice = localStorage.getItem("selectedVoice");
+    if (storedVoice && availableVoices.includes(storedVoice)) {
+      setSelectedVoice(storedVoice);
+    }
   }, []);
 
   useEffect(() => {
@@ -381,6 +404,10 @@ function App() {
       isAudioPlaybackEnabled.toString()
     );
   }, [isAudioPlaybackEnabled]);
+
+  useEffect(() => {
+    localStorage.setItem("selectedVoice", selectedVoice);
+  }, [selectedVoice]);
 
   useEffect(() => {
     if (audioElementRef.current) {
@@ -512,6 +539,33 @@ function App() {
               </div>
             </div>
           )}
+          <div className="flex items-center ml-6">
+            <label className="flex items-center text-base gap-1 mr-2 font-medium">
+              Voice
+            </label>
+            <div className="relative inline-block">
+              <select
+                value={selectedVoice}
+                onChange={handleVoiceChange}
+                className="appearance-none border border-gray-300 rounded-lg text-base px-2 py-1 pr-8 cursor-pointer font-normal focus:outline-none"
+              >
+                {availableVoices.map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 text-gray-600">
+                <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fillRule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.44l3.71-3.21a.75.75 0 111.04 1.08l-4.25 3.65a.75.75 0 01-1.04 0L5.21 8.27a.75.75 0 01.02-1.06z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
