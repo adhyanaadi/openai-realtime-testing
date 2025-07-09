@@ -9,6 +9,7 @@ import Image from "next/image";
 import Transcript from "./components/Transcript";
 import Events from "./components/Events";
 import BottomToolbar from "./components/BottomToolbar";
+import MCPQuery from "./components/MCPQuery";
 
 // Types
 import { SessionStatus } from "@/app/types";
@@ -587,6 +588,8 @@ function App() {
 
         <Events isExpanded={isEventsPaneExpanded} />
       </div>
+
+      <MCPQuery />
 
       <BottomToolbar
         sessionStatus={sessionStatus}
