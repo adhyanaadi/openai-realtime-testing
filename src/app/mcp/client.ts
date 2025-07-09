@@ -41,6 +41,24 @@ export function createMCPClient(url: string) {
 
   function onMessage(handler: (data: any) => void) {
     handlers.push(handler);
+    return () => {
+      const idx = handlers.indexOf(handler);
+      if (idx >= 0) handlers.splice(idx, 1);
+    };
+  }
+
+  async function request(method: string, params: Record<string, any> = {}) {
+    connect();
+    return new Promise<any>((resolve, reject) => {
+      const off = onMessage((data) => {
+        off();
+        resolve(data);
+      });
+      send(method, params).catch((err) => {
+        off();
+        reject(err);
+      });
+    });
   }
 
   function close() {
@@ -49,5 +67,5 @@ export function createMCPClient(url: string) {
     messagesEndpoint = null;
   }
 
-  return { connect, send, onMessage, close } as const;
+  return { connect, send, request, onMessage, close } as const;
 }
