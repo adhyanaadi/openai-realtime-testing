@@ -39,4 +39,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 todo.md
+mcp-server/node_modules
+mcp-server/dist
 

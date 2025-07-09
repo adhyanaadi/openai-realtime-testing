@@ -1,7 +1,7 @@
 import { simpleHandoffScenario } from './simpleHandoff';
 import { customerServiceRetailScenario } from './customerServiceRetail';
 import { chatSupervisorScenario } from './chatSupervisor';
-import { mcpScenario } from './mcpAgent';
+import { mcpScenario } from './mcp';
 
 import type { RealtimeAgent } from '@openai/agents/realtime';
 

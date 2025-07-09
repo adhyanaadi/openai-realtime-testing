@@ -9,7 +9,7 @@ import Image from "next/image";
 import Transcript from "./components/Transcript";
 import Events from "./components/Events";
 import BottomToolbar from "./components/BottomToolbar";
-import MCPQuery from "./components/MCPQuery";
+import MCPDocsPanel from "./components/MCPDocsPanel";
 
 // Types
 import { SessionStatus } from "@/app/types";
@@ -25,10 +25,10 @@ import { createModerationGuardrail } from "@/app/agentConfigs/guardrails";
 import { allAgentSets, defaultAgentSetKey } from "@/app/agentConfigs";
 import { customerServiceRetailScenario } from "@/app/agentConfigs/customerServiceRetail";
 import { chatSupervisorScenario } from "@/app/agentConfigs/chatSupervisor";
-import { mcpScenario } from "@/app/agentConfigs/mcpAgent";
 import { customerServiceRetailCompanyName } from "@/app/agentConfigs/customerServiceRetail";
 import { chatSupervisorCompanyName } from "@/app/agentConfigs/chatSupervisor";
 import { simpleHandoffScenario } from "@/app/agentConfigs/simpleHandoff";
+import { mcpScenario } from "@/app/agentConfigs/mcp";
 
 // Map used by connect logic for scenarios defined via the SDK.
 const sdkScenarioMap: Record<string, RealtimeAgent[]> = {
@@ -589,9 +589,8 @@ function App() {
         />
 
         <Events isExpanded={isEventsPaneExpanded} />
+        <MCPDocsPanel />
       </div>
-
-      <MCPQuery />
 
       <BottomToolbar
         sessionStatus={sessionStatus}
