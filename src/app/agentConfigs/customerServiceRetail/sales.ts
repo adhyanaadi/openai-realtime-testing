@@ -2,7 +2,7 @@ import { RealtimeAgent, tool } from '@openai/agents/realtime';
 
 export const salesAgent = new RealtimeAgent({
   name: 'salesAgent',
-  voice: 'sage',
+  voice: 'echo',
   handoffDescription:
     "Handles sales-related inquiries, including new product details, recommendations, promotions, and purchase flows. Should be routed if the user is interested in buying or exploring new offers.",
 
@@ -64,7 +64,10 @@ export const salesAgent = new RealtimeAgent({
         required: ['item_id'],
         additionalProperties: false,
       },
-      execute: async (input: any) => ({ success: true }),
+      execute: async (_input: any) => {
+        void _input;
+        return { success: true };
+      },
     }),
 
     tool({
@@ -90,7 +93,10 @@ export const salesAgent = new RealtimeAgent({
         required: ['item_ids', 'phone_number'],
         additionalProperties: false,
       },
-      execute: async (input: any) => ({ checkoutUrl: 'https://example.com/checkout' }),
+      execute: async (_input: any) => {
+        void _input;
+        return { checkoutUrl: 'https://example.com/checkout' };
+      },
     }),
   ],
 

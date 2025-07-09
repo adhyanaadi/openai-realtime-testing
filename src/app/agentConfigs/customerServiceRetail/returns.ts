@@ -2,7 +2,7 @@ import { RealtimeAgent, tool, RealtimeItem } from '@openai/agents/realtime';
 
 export const returnsAgent = new RealtimeAgent({
   name: 'returns',
-  voice: 'sage',
+  voice: 'echo',
   handoffDescription:
     'Customer Service Agent specialized in order lookups, policy checks, and return initiations.',
 
@@ -88,8 +88,8 @@ Speak at a medium pace—steady and clear. Brief pauses can be used for emphasis
         required: ['phoneNumber'],
         additionalProperties: false,
       },
-      execute: async (input: any) => {
-        const { phoneNumber } = input as { phoneNumber: string };
+      execute: async (_input: any) => {
+        void _input;
         return {
           orders: [
             {
@@ -160,7 +160,8 @@ Speak at a medium pace—steady and clear. Brief pauses can be used for emphasis
         required: ['region', 'itemCategory'],
         additionalProperties: false,
       },
-      execute: async (input: any) => {
+      execute: async (_input: any) => {
+        void _input;
         return {
           policy: `
 At Snowy Peak Boards, we believe in transparent and customer-friendly policies to ensure you have a hassle-free experience. Below are our detailed guidelines:
