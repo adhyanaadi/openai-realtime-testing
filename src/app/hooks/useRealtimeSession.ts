@@ -21,6 +21,8 @@ export interface ConnectOptions {
   audioElement?: HTMLAudioElement;
   extraContext?: Record<string, any>;
   outputGuardrails?: any[];
+  speed?: number;
+  additionalInstructions?: string;
 }
 
 export function useRealtimeSession(callbacks: RealtimeSessionCallbacks = {}) {
@@ -115,6 +117,8 @@ export function useRealtimeSession(callbacks: RealtimeSessionCallbacks = {}) {
       audioElement,
       extraContext,
       outputGuardrails,
+      speed,
+      additionalInstructions,
     }: ConnectOptions) => {
       if (sessionRef.current) return; // already connected
 
@@ -144,6 +148,10 @@ export function useRealtimeSession(callbacks: RealtimeSessionCallbacks = {}) {
           inputAudioTranscription: {
             model: 'gpt-4o-mini-transcribe',
           },
+          ...(typeof speed === 'number' ? { speed } : {}),
+          ...(additionalInstructions
+            ? { instructions: additionalInstructions }
+            : {}),
         },
         outputGuardrails: outputGuardrails ?? [],
         context: extraContext ?? {},

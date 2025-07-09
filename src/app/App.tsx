@@ -220,8 +220,11 @@ function App() {
           reorderedAgents.unshift(agent);
         }
 
+        const accentPrompt =
+          'Speak with a strong New Yorker accent and a slightly faster pace.';
         reorderedAgents.forEach((agent) => {
           (agent as any).voice = selectedVoice;
+          (agent as any).instructions = `${agent.instructions}\n\n${accentPrompt}`;
         });
 
         const companyName = agentSetKey === 'customerServiceRetail'
@@ -237,6 +240,8 @@ function App() {
           extraContext: {
             addTranscriptBreadcrumb,
           },
+          speed: 1.25,
+          additionalInstructions: accentPrompt,
         });
       } catch (err) {
         console.error("Error connecting via SDK:", err);
